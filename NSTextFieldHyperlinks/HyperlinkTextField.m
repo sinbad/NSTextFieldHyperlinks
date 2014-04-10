@@ -143,8 +143,15 @@
             NSRange range = [[info objectForKey:kHyperlinkInfoCharacterRangeKey] rangeValue];
             if (NSLocationInRange(index, range))
             {
-                NSURL *url = [info objectForKey:kHyperlinkInfoURLKey];
-                [[NSWorkspace sharedWorkspace] openURL:url];
+                id url = [info objectForKey:kHyperlinkInfoURLKey];
+                NSURL* urlObj = nil;
+                if ([url isKindOfClass:[NSURL class]])
+                    urlObj = url;
+                else if ([url isKindOfClass:[NSString class]])
+                    urlObj = [NSURL URLWithString:url];
+                
+                if (urlObj)
+                    [[NSWorkspace sharedWorkspace] openURL:urlObj];
             }
         }
     }
